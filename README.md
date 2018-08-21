@@ -5,7 +5,7 @@ In order to run this project you must follow these steps:
 
 	1. Install Git
 	2. and NodeJS (including NPM) on Your Computer
-	3. Open a Terminal/Command Line and then git clone [url]"
+	3. Open a Terminal/Command Line and then git clone "https://github.com/camilopv19/battleship.git"
 	4. cd blocktactoe
 	5. npm install
 	6. npm install -g truffle
