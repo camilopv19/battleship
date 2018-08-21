@@ -1,0 +1,43 @@
+#board {
+  width:300px;
+  height:300px;
+  margin: 0 auto;
+}
+
+#board td {
+  border: 1px solid;
+  width: 33.333%;
+  height: 33.333%;
+}
+
+.in-game{
+  display: none;
+}
+
+
+#matrix {
+  border: 1px solid blue;
+  margin: 0 auto;
+}
+
+#matrix .btn{
+  height: 80px;
+  width: 80px;
+  border: none;
+   background: linear-gradient(to top left, #0033cc 18%, #33ccff 75%);
+}
+
+#matrix .btn:hover {
+   background: linear-gradient(to top left, #ffffff 18%, #33ccff 75%);
+}
+
+.ButtonClass
+{
+  height: 80px;
+  width: 80px;
+    background-image: url("https://image.flaticon.com/icons/svg/66/66569.svg");   
+     background-repeat: no-repeat;
+    background-position: center;
+    border: none;    
+}
+
