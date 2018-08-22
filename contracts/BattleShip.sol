@@ -55,7 +55,7 @@ contract BattleShip {
     ];
 
 
-    function fireTorpedo(string _str_row, uint _col) public {
+    function fireTorpedo(string _str_row, uint _col) public{
         //Convert (Letter,Column) to array (row,col)
         uint _row;
         _row = rLetter[_str_row];

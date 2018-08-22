@@ -27,25 +27,12 @@ One Game Costs: 0.1 Ether<br />
   Game-Address: <span id="game-address"></span><br />
   <div class="waiting-for-join">Opponent-Address: <span id="opponent-address"></span></div>
 </div>
-  <hr /><button class="btn btn-sm" onclick="App.useAccountOne()">Use Account #2</button>
-  <hr /><button class="btn btn-sm" onclick="App.getBoard()">Get Board</button>
+  <hr /><input class="btn btn-default" onclick="App.useAccountOne()" value="Use Account #2">
+  <hr /><input class="btn btn-default in-game" onclick="App.getBoard()" value="Get Board">
   <br />
   <span class="hint small"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
 </div>
 </div>
 </div>
 </body>
-<script>
-  function fire(e) {
-      var buttons = document.getElementsByClassName("btn");
-      var buttonsCount = buttons.length;
-      for (var i = 0; i <= buttonsCount; i += 1) {
-        buttons[i].onclick = function (e) {
-          $(this).css({
-            background: "-webkit-gradient(linear,left top, right bottom, from(#f00), to(#000))"
-          });
-        }
-      }
-    }
-</script>
 </html>

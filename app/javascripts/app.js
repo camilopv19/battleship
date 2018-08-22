@@ -55,7 +55,7 @@ window.App = {
     BattleShip.new({from:account, value:web3.toWei(0.1,"ether"), gas:3000000}).then(instance => {
       battleShipInstance = instance;
 
-      console.log(instance);
+      // console.log(instance);
       $(".in-game").show();
       $(".waiting-for-join").hide();
       $(".game-start").hide();
@@ -63,18 +63,26 @@ window.App = {
       
       var table = $("<table>").insertAfter("div:last");
       table.attr('id', 'matrix');
-      var ltr = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-      var nbr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+      var nbr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       var ctr;
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < 11; i++) {
         var row = $("<tr>");
-        for (var j = 0; j < 10; j++) {
-          ctr = ltr[i] + nbr[j];
-          var btn = "<button class='btn' id=" + ctr + " onClick=fire()> </button>"
-          $("<td>" + btn + "</td>").appendTo(row);
+        for (var j = 0; j < 11; j++) {
+          if (j == 0) {
+            $("<td><p>" + ltr[i] + "</p></td>").appendTo(row);
+          }
+          else {
+            if (i == 0) {
+              $("<td><p>" + nbr[j] + "</p></td>").appendTo(row);
+            } else {
+              ctr = ltr[i] + nbr[j];
+              var btn = "<button class='btn' id=" + ctr + "> </button>"
+              $("<td>" + btn + "</td>").appendTo(row);
+            }
+          }
         }
         table.append(row);
-
       }
 
       $("#hit").click(function () {
@@ -83,6 +91,11 @@ window.App = {
           background: "-webkit-gradient(linear,left top, right bottom, from(#3c3), to(#000))"
         });
       });
+
+      $("button").click(function () {
+        App.fire("A",3)
+        });
+        
 
       //$("#waiting").show();
 /*
@@ -106,9 +119,33 @@ window.App = {
       console.error(error);
     })
   },
+  fire: function (r, c) {
+    console.log(r + "," + c);
+    battleShipInstance.fireTorpedo(r,c,{from: account}).then(txresult => {
+      battleShipInstance.m().then(mresult => {
+        console.log(mresult);
+      });
+    });
+  },
   getBoard: function () {
-    console.error(battleShipInstance); 
-},
+    battleShipInstance.getBoard().then(txResult => {
+      // console.log(txResult);
+      var ltr = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+      var nbr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      var cell;
+
+      for (let i = 0; i < txResult.length; i++) {
+        for (let j = 0; j < txResult.length; j++) {
+          if (txResult[i][j].c[0] > 0) {
+            cell = "#" + ltr[i] + nbr[j];
+              $(cell).css({
+                background: "-webkit-gradient(linear,left top, right bottom, from(#bcf), to(#000))"
+              });
+          } 
+        }
+      }
+    });
+  },
   joinGame: function() {
     var gameAddress = prompt("Address of the Game");
     if(gameAddress != null) {
