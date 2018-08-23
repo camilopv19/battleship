@@ -18,40 +18,46 @@
   background-color: lightgrey;
 }
 
+
+
 #matrix {
   border: 1px solid blue;
   margin: 0 auto;
 }
 
 #matrix .btn{
-  height: 80px;
-  width: 80px;
+  height: 60px;
+  width: 60px;
   border: none;
    background: linear-gradient(to top left, #0033cc 18%, #33ccff 75%);
 }
 
-#matrix .btn:hover {
+#matrix .firing:hover{
    background: linear-gradient(to top left, #ffffff 18%, #33ccff 75%);
 }
 
+#matrix .place {
+   background: linear-gradient(to bottom, #d3d3d3 0%, #000000 100%);
+}
+
+/*
 .ButtonClass
 {
-  height: 80px;
-  width: 80px;
+  height: 60px;
+  width: 60px;
     background-image: url("https://image.flaticon.com/icons/svg/66/66569.svg");   
      background-repeat: no-repeat;
     background-position: center;
     border: none;    
 }
-
-body {
-  color: #457fb9;
-}
-
+*/
 p {
-  text-align: center;
+text-align: center;
  font-weight: bolder;
   margin: 0 auto;
   padding: 4px;
-  font-family: inherit;
+}
+
+#matrix .drop {
+   background: linear-gradient(to bottom, #d3d3d3 0%, #000000 100%);
 }

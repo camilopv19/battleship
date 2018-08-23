@@ -63,6 +63,7 @@ window.App = {
       
       var table = $("<table>").insertAfter("div:last");
       table.attr('id', 'matrix');
+      //table.attr('class', 'parent');  //Nueva línea
       var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
       var nbr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       var ctr;
@@ -77,7 +78,7 @@ window.App = {
               $("<td><p>" + nbr[j] + "</p></td>").appendTo(row);
             } else {
               ctr = ltr[i] + nbr[j];
-              var btn = "<button class='btn' id=" + ctr + "> </button>"
+              var btn = "<button class='btn vert' id=" + ctr + "> </button>"
               $("<td>" + btn + "</td>").appendTo(row);
             }
           }
@@ -85,17 +86,91 @@ window.App = {
         table.append(row);
       }
 
-      $("#hit").click(function () {
-        var cell = "#" + $("#txt").val();
-        $(cell).css({
-          background: "-webkit-gradient(linear,left top, right bottom, from(#3c3), to(#000))"
-        });
+      $("button").click(function () {
+        var ltrs = ".ABCDEFGHIJ";
+        var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        var l = this.id.length > 2 ? -2 : -1;
+        var row = (this.id).slice(0, l);
+        var rowNum = ltrs.indexOf(row);
+        var col = parseInt((this.id).slice(1, 3));
+        var dest = $('.place').length - 1;
+        var me = this.id;
+        if (!$(this).hasClass('firing')) {
+
+          if ($(this).hasClass('vert')) {
+            //console.log(me + " to " + ltr[rowNum + dest] + col);
+            for (let i = rowNum; i <= (rowNum + dest); i++) {
+              var id = "#" + ltr[i] + col;
+              $(id).addClass('drop');
+            }
+          }
+          else {
+            var coln = col + dest;
+            //console.log(me + " to " + row + coln);
+            for (let i = col; i <= coln; i++) {
+              var id = "#" + row + i;
+              $(id).addClass('drop');
+            }
+          }
+        }
+        else {
+          
+          App.fire(row, col);
+        }
+
       });
 
-      $("button").click(function () {
-        App.fire("A",3)
-        });
-        
+      $(".btn").hover(
+        // fired on entry
+        function () {
+          var cell = $("#txt").val() == "" ? 1 : $("#txt").val();
+          cell = parseInt(cell);
+          var ltrs = ".ABCDEFGHIJ";
+          var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+          var l = this.id.length > 2 ? -2 : -1;
+          var row = (this.id).slice(0, l);
+          var rowNum = ltrs.indexOf(row);
+          var col = parseInt((this.id).slice(1, 3));
+          if (!$(this).hasClass('vert') && !$(this).hasClass('firing')) {
+            //console.log(col + cell);
+            for (let i = col; i <= (col + cell); i++) {
+              //console.log(row + i);
+              document.getElementById(row + i).classList.add('place');
+            }
+          }
+          else if (!$(this).hasClass('firing')) {
+            for (let i = rowNum; i <= (rowNum + cell); i++) {
+              document.getElementById(ltr[i] + col).classList.add('place');
+            }
+          }
+
+        },
+        function () {
+          var cell = $("#txt").val() == "" ? 1 : $("#txt").val();
+          cell = parseInt(cell);
+          var ltrs = ".ABCDEFGHIJ";
+          var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+          var l = this.id.length > 2 ? -2 : -1;
+          var row = (this.id).slice(0, l);
+          var rowNum = ltrs.indexOf(row);
+          var col = parseInt((this.id).slice(1, 3));
+
+          if (!$(this).hasClass('vert') && !$(this).hasClass('firing')) {
+            //console.log(col + cell);
+            for (let i = col; i <= (col + cell); i++) {
+              //console.log(row + i);
+              document.getElementById(row + i).classList.remove('place');
+            }
+          }
+          else if (!$(this).hasClass('firing')) {
+
+            for (let i = rowNum; i <= (rowNum + cell); i++) {
+              document.getElementById(ltr[i] + col).classList.remove('place');
+            }
+          }
+
+        }
+      );
 
       //$("#waiting").show();
 /*
@@ -119,12 +194,45 @@ window.App = {
       console.error(error);
     })
   },
+  orientation: function () {
+    var $btnList = $('.btn');
+    if ($btnList.hasClass('vert')) {
+      $btnList.removeClass('vert');
+    } else {
+      $btnList.addClass('vert');
+    }
+  },
+  getMessage: function () {
+    battleShipInstance.m().then(mresult => { 
+      console.log(mresult);
+    });
+  },
+  firingState: function () {
+    var $btnList = $('.btn');
+    if ($btnList.hasClass('firing')) {
+      $btnList.removeClass('firing');
+    } else {
+      $btnList.addClass('firing');
+    }
+  },
   fire: function (r, c) {
-    console.log(r + "," + c);
     battleShipInstance.fireTorpedo(r,c,{from: account}).then(txresult => {
+      console.log(r + c + " fired! Check message");
       battleShipInstance.m().then(mresult => {
-        console.log(mresult);
+        // alert(mresult);
+        var cell = "#" + r + c;
+        var color = "";
+        if (mresult == "Hit!" || mresult == "You destroyed my ship. ") {
+          color = "3c3";
+        } else if (mresult == "Miss!"){
+          color = "f00";
+        }
+        $(cell).css({
+          background: "-webkit-gradient(linear,left top, right bottom, from(#" + color + "), to(#000))"
+        });
       });
+    }).catch(error => {
+      console.error(error);
     });
   },
   getBoard: function () {
