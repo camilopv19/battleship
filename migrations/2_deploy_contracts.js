@@ -1,5 +1,5 @@
 var BattleShip = artifacts.require("./BattleShip.sol");
 
 module.exports = function(deployer) {
-  //deployer.deploy(TicTacToe);
+  // deployer.deploy(BattleShip);
 };

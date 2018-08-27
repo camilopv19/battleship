@@ -10,34 +10,29 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12 text-center">
-  <h1>Battleship</h1>
-  <h2>Play Battleship on the Blockchain</h2>
-  <div class="in-game waiting-for-join" id="waiting">Waiting for Opponent!</div>
-  <div class="in-game waiting-for-join" id="your-turn">Your Turn</div>
-  <table id="board" class="in-game waiting-for-join">
-              <div id="here_table">
-              </div>
-          </table>
-          <div class="game-start">
-  <br><br><button id="create" onclick="App.createNewGame()" class="btn btn-primary">Create Game</button> - or - <button id="join" onclick="App.joinGame()" class="btn btn-default">Join Game</button>
-<br />
-One Game Costs: 0.1 Ether<br />
-</div>
-<div class="in-game">
-  Game-Address: <span id="game-address"></span><br />
-  <div class="waiting-for-join">Opponent-Address: <span id="opponent-address"></span></div>
-</div>
-  <hr /><input class="btn btn-default" onclick="App.useAccountOne()" value="Use Account #2">
-  <hr /><input class="btn btn-default in-game" onclick="App.getBoard()" value="Get Board">
-  <hr /><input class="btn btn-default in-game" onclick="App.orientation()" value="Toggle Vertical - Horizontal">
-  <hr /><input class="btn btn-default in-game" onclick="App.firingState()" value="Toggle Placing - Firing">
-  <hr />
-  <input class="btn btn-default in-game" onclick="App.getMessage()" value="Get message">
-  <hr /><input type="text" id="txt">
-  <br />
-  <span class="hint small"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
-</div>
-</div>
-</div>
+        <h1>ConsenSys Developer Pogram 2018 - Final Project</h1>
+        <h2>Battleship on Blockchain</h2>
+        <h3></h3>
+        <div class="game-start">
+          <br><br><button id="create" onclick="App.createNewGame()" class="btn btn-primary">Create Game</button>
+          <br/>One Game Costs: 0.1 Ether<br />
+        </div>
+        <div class="in-game">
+          Game-Address: <span id="game-address"></span><br />
+        </div>
+        <div class="in-game">
+          <hr /><input class="btn btn-default" readonly="readonly"onclick="App.orientation()" id="tggl" value="Toggle Vertical/Horizontal">
+          <hr /><input class="btn btn-default" readonly="readonly" onclick="App.saveBoard()"  id="save" value="Save Board" disabled="disabled">
+          <hr /><input class="btn btn-default" readonly="readonly" onclick="App.getBoard()" id="getBrd" value="Test: Get Board">
+        </div>
+        <br />
+        <div id="game_table" class="in-game"></div>
+        <div id="myIds" class="in-game"></div>
+        <div id="txt" class="mybox in-game">1</div>
+        <span class="hint small"><strong>Hint:</strong> Open the browser developer console to view any errors and warnings.</span>
+      </div>
+    </div>
+  </div>
+  <br /><br /><br />
 </body>
 </html>
