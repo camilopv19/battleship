@@ -37,12 +37,14 @@ contract BattleShip {
     uint rows = 10;
     uint cols = 10;
     uint sunken = 0;
-    uint[5] ships = [5, 4, 3, 3, 2];
+    // uint[5] ships = [5, 4, 3, 3, 2];
+    uint[5] ships = [0, 0, 0, 0, 2];
     uint _result;
     string _boardStr;
     uint[10][10] public gameBoard;
     
     event AllSunk(bool _win);
+    event Message(string _word);
 
     constructor()public payable {
         require(msg.value == gameCost);
@@ -81,11 +83,11 @@ contract BattleShip {
         _boardStr = _brd;
         return gameBoard;
     }
-    // function saveBoard(uint[10][10] _brd)
+    // function saveBoard(uint[17] _brd)
     // public 
-    // returns(uint[10][10]){
-    //     gameBoard = _brd;
-    //     return gameBoard;
+    // pure
+    // returns(uint[17]){
+    //     return _brd;
     // }
 
     /** @dev Returns the result in UINT format, according the guess in the board.
@@ -105,6 +107,7 @@ contract BattleShip {
     public {
         //Convert (Letter,Column) to array (row,col)
         uint _row;
+        _result = gameBoard[_row][_col];
         _row = rLetter[_str_row];
         _col -= 1;
 
@@ -121,12 +124,16 @@ contract BattleShip {
             // Set this square's value to indicate a hit
             _result = shipStat(gameBoard[_row][_col]);
             gameBoard[_row][_col] = _result;
-            
+            if (_result == 8) {
+                emit Message("Hit!");
+            } else {
+                emit Message("You sunk my ship!");
+            }
             // If player clicks a square that's been previously hit, let it know.
         } else if (gameBoard[_row][_col] > 1) {
 
             // Keep the same result
-            _result = gameBoard[_row][_col];
+            _result = 6;
         }
     }
 
@@ -195,7 +202,8 @@ contract BattleShip {
             ships[4] -= 1;
 
             if (ships[4] == 0) {
-                sunken += 1;
+                sunken += 5;
+                // sunken += 1;
                 _stat = 7;
             }
             else{
