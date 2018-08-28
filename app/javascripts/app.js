@@ -58,6 +58,7 @@ window.App = {
       $(".in-game").show();
       $("#getBrd").hide();
       $(".game-start").hide();
+      $("#ships").hide();
       $("#game-address").text(instance.address);
       $("h3").text("Place Patrol Craft");
 
@@ -114,6 +115,10 @@ window.App = {
                     for (let i = rowNum; i <= rowNum + dest; i++) {
                       var id = "#" + ltr[i] + col;
                       $(id).addClass("drop");
+                      
+                      var c = ($("h3").text() == "Place Patrol Craft" ||
+                        $("h3").text() == "Place Destroyer") ? 0 : 1;
+                      $(id).val(shipCnt + c);
                     }
                   } else {
                     if ($("h3").text() == "Place Destroyer" ||
@@ -166,6 +171,10 @@ window.App = {
                     for (let i = col; i <= coln; i++) {
                       var id = "#" + row + i;
                       $(id).addClass("drop");
+
+                      var c = ($("h3").text() == "Place Patrol Craft" || 
+                        $("h3").text() == "Place Destroyer") ? 0 : 1 ;
+                      $(id).val(shipCnt + c );
                     }
                   } else {
                     if (
@@ -222,50 +231,54 @@ window.App = {
 
       $(".btn").hover(
         function () {
-          if ($("#save").attr("disabled") == "disabled") {
-            var cell = $("#txt").text() == "" ? 1 : parseInt($("#txt").text());
-            cell = parseInt(cell);
-            var ltrs = ".ABCDEFGHIJ";
-            var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-            var l = this.id.length > 2 ? -2 : -1;
-            var row = this.id.slice(0, l);
-            var rowNum = ltrs.indexOf(row);
-            var col = parseInt(this.id.slice(1, 3));
-            if (!$(this).hasClass("vert") && !$(this).hasClass("firing")) {
-              for (let i = col; i <= col + cell; i++) {
-                var _i = Math.min(Math.max(parseInt(i), 1), 10);
-                document.getElementById(row + _i).classList.add("place");
-              }
-            } else if (!$(this).hasClass("firing")) {
-              for (let i = rowNum; i <= rowNum + cell; i++) {
-                var _i = Math.min(Math.max(parseInt(i), 1), 10);
-                document.getElementById(ltr[_i] + col).classList.add("place");
+          if (this.id != "tggl" && this.id != "getGBrd" && this.id != "getS") {
+            if ($("#save").attr("disabled") == "disabled") {
+              var cell = $("#txt").text() == "" ? 1 : parseInt($("#txt").text());
+              cell = parseInt(cell);
+              var ltrs = ".ABCDEFGHIJ";
+              var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+              var l = this.id.length > 2 ? -2 : -1;
+              var row = this.id.slice(0, l);
+              var rowNum = ltrs.indexOf(row);
+              var col = parseInt(this.id.slice(1, 3));
+              if (!$(this).hasClass("vert") && !$(this).hasClass("firing")) {
+                for (let i = col; i <= col + cell; i++) {
+                  var _i = Math.min(Math.max(parseInt(i), 1), 10);
+                  document.getElementById(row + _i).classList.add("place");
+                }
+              } else if (!$(this).hasClass("firing")) {
+                for (let i = rowNum; i <= rowNum + cell; i++) {
+                  var _i = Math.min(Math.max(parseInt(i), 1), 10);
+                  document.getElementById(ltr[_i] + col).classList.add("place");
+                }
               }
             }
           }
         },
-        function () {
-          if ($("#save").attr("disabled") == "disabled") {
-            var cell = $("#txt").text() == "" ? 1 : parseInt($("#txt").text());
-            cell = parseInt(cell);
-            var ltrs = ".ABCDEFGHIJ";
-            var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-            var l = this.id.length > 2 ? -2 : -1;
-            var row = this.id.slice(0, l);
-            var rowNum = ltrs.indexOf(row);
-            var col = parseInt(this.id.slice(1, 3));
+          function () {
+            if (this.id != "tggl" && this.id != "getGBrd" && this.id != "getS") {
+              if ($("#save").attr("disabled") == "disabled") {
+                var cell = $("#txt").text() == "" ? 1 : parseInt($("#txt").text());
+                cell = parseInt(cell);
+                var ltrs = ".ABCDEFGHIJ";
+                var ltr = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+                var l = this.id.length > 2 ? -2 : -1;
+                var row = this.id.slice(0, l);
+                var rowNum = ltrs.indexOf(row);
+                var col = parseInt(this.id.slice(1, 3));
 
-            if (!$(this).hasClass("vert") && !$(this).hasClass("firing")) {
-              for (let i = col; i <= col + cell; i++) {
-                var _i = Math.min(Math.max(parseInt(i), 1), 10);
-                document.getElementById(row + _i).classList.remove("place");
+                if (!$(this).hasClass("vert") && !$(this).hasClass("firing")) {
+                  for (let i = col; i <= col + cell; i++) {
+                    var _i = Math.min(Math.max(parseInt(i), 1), 10);
+                    document.getElementById(row + _i).classList.remove("place");
+                  }
+                } else if (!$(this).hasClass("firing")) {
+                  for (let i = rowNum; i <= rowNum + cell; i++) {
+                    var _i = Math.min(Math.max(parseInt(i), 1), 10);
+                    document.getElementById(ltr[_i] + col).classList.remove("place");
+                  }
+                }
               }
-            } else if (!$(this).hasClass("firing")) {
-              for (let i = rowNum; i <= rowNum + cell; i++) {
-                var _i = Math.min(Math.max(parseInt(i), 1), 10);
-                document.getElementById(ltr[_i] + col).classList.remove("place");
-              }
-            }
           }
         }
       );
@@ -284,22 +297,22 @@ window.App = {
   },
   saveBoard: function () {
     var boardCell = [
-      [ "A1","A2","A3","A4","A5","A6","A7","A8","A9","A10" ],
-      [ "B1","B2","B3","B4","B5","B6","B7","B8","B9","B10" ],
-      [ "C1","C2","C3","C4","C5","C6","C7","C8","C9","C10" ],
-      [ "D1","D2","D3","D4","D5","D6","D7","D8","D9","D10" ],
-      [ "E1","E2","E3","E4","E5","E6","E7","E8","E9","E10" ],
-      [ "F1","F2","F3","F4","F5","F6","F7","F8","F9","F10" ],
-      [ "G1","G2","G3","G4","G5","G6","G7","G8","G9","G10" ],
-      [ "H1","H2","H3","H4","H5","H6","H7","H8","H9","H10" ],
-      [ "I1","I2","I3","I4","I5","I6","I7","I8","I9","I10" ],
-      [ "J1","J2","J3","J4","J5","J6","J7","J8","J9","J10" ]
+       ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10"],
+       ["B1","B2","B3","B4","B5","B6","B7","B8","B9","B10"],
+       ["C1","C2","C3","C4","C5","C6","C7","C8","C9","C10"],
+       ["D1","D2","D3","D4","D5","D6","D7","D8","D9","D10"],
+       ["E1","E2","E3","E4","E5","E6","E7","E8","E9","E10"],
+       ["F1","F2","F3","F4","F5","F6","F7","F8","F9","F10"],
+       ["G1","G2","G3","G4","G5","G6","G7","G8","G9","G10"],
+       ["H1","H2","H3","H4","H5","H6","H7","H8","H9","H10"],
+       ["I1","I2","I3","I4","I5","I6","I7","I8","I9","I10"],
+       ["J1","J2","J3","J4","J5","J6","J7","J8","J9","J10"]
   ];
     var numItems = $(".drop").length;
     if (numItems == 17) {
 
       var $btnList = $(".btn");
-      if ($btnList.hasClass("firing")) {} else {
+      if (!$btnList.hasClass("firing")){
 
         var ids = $(".drop")
           .map(function () {
@@ -307,27 +320,47 @@ window.App = {
           })
           .get();
         $("#myIds").text(ids.join());
-         var myArray = [];
-          battleShipInstance.saveBoard(ids.join(), {from: account}).then(brdResult => {
+        
+        var brdComplete = [];
+        for (let i = 0; i < 10; i++) {
+          brdComplete.push([]);
+          for (let j = 0; j < 10; j++) {
+            brdComplete[i][j] = 0;
+          }
+        }
+        
+        var _val;
+        for (let h = 0; h < 17; h++) {
+           _val = parseInt($("#" + ids[h]).val());
+          for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+              if (ids[h] == boardCell[i][j]) {
+                brdComplete[i][j] = _val;
+              }
+            }
+          }
+        }
+        console.log(brdComplete);
+        battleShipInstance.saveBoard(brdComplete, {from: account}).then(brdResult => {
             console.log(brdResult);
             $("#save").attr("disabled", "disabled");
             $("h3").text("Board saved");
             $("#getBrd").show();
-            $
             App.cleanBoard();
-            $btnList.addClass("firing");
+            App.firingState();
           });
+          
       }
     } else {
       alert("Something went wrong with the board, please Refresh this page.");
     }
   },
   cleanBoard: function () {
-    var $btnList = $('.btn');
-    $btnList.removeClass('place');
-    $btnList.removeClass('vert');
-    $btnList.removeClass('drop');
-    $btnList.removeClass('firing');
+    var $btnList = $(".btn");
+    $btnList.removeClass("place");
+    $btnList.removeClass("vert");
+    $btnList.removeClass("drop");
+    $btnList.removeClass("firing");
   },
   firingState: function () {
     var $btnList = $('.btn');
@@ -338,19 +371,12 @@ window.App = {
     }
   },
   fire: function (r, c) {
-    // let status = document.getElementById ("myIds");
-    // var latestBlock = web3.eth.blockNumber;
     if (arrEventsFired.length == 0) {
       var cell = "#" + r + c;
       battleShipInstance.fireTorpedo(r, c, {
         from: account
       }).then(txresult => {
         console.log("Torpedo fired at " + r + c);
-
-        // battleShipInstance.Message().watch ( (err, response) => {  //set up listener for the AuctionClosed Event
-        //   //once the event has been detected, take actions as desired
-        //   status.innerHTML = response.args._word;
-        // });
 
         battleShipInstance.showHit().then(txresult => {
           var color = "";
@@ -380,6 +406,7 @@ window.App = {
               console.log("You sunk all my ships: YOU WIN!");
               break;
           }
+          
           $(cell).css({
             background: "-webkit-gradient(linear,left top, right bottom, from(#" + color + "), to(#000))"
           });
@@ -389,6 +416,39 @@ window.App = {
     }
   },
   getBoard: function () {
+    battleShipInstance.getMyBoard().then(txResult => {
+
+      App.cleanBoard();
+      var ltr = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+      var nbr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      var cell;
+
+      for (let i = 0; i < txResult.length; i++) {
+        for (let j = 0; j < txResult.length; j++) {
+          if (txResult[i][j].c[0] > 0 && txResult[i][j].c[0] < 9) {
+            cell = "#" + ltr[i] + nbr[j];
+            $(cell).addClass("drop");
+          }
+        }
+      }
+    });
+  },
+  getShips: function () {
+    $("#ships").show();
+    battleShipInstance.getShips().then(txResult => {
+      var p = txResult[4].c[0];
+      var d = txResult[3].c[0];
+      var s = txResult[2].c[0];
+      var b = txResult[1].c[0];
+      var c = txResult[0].c[0];
+      $("#s1").empty().append("<strong>Patrol boat:  </strong>" + p);
+      $("#s2").empty().append("<strong>Destroyer:  </strong>" + d);
+      $("#s3").empty().append("<strong>Submarine:  </strong>" + s);
+      $("#s4").empty().append("<strong>Battleship:  </strong>" + b);
+      $("#s5").empty().append("<strong>Carrier:  </strong>" + c);
+    });
+  },
+  getGameBrd: function () {
     battleShipInstance.getBoard().then(txResult => {
 
       App.cleanBoard();
@@ -417,9 +477,7 @@ window.App = {
 
           if (txResult[i][j].c[0] > 0 && txResult[i][j].c[0] < 9) {
             cell = "#" + ltr[i] + nbr[j];
-            $(cell).css({
-              background: "-webkit-gradient(linear,left top, right bottom, from(#" + color + "), to(#000))"
-            });
+            $(cell).addClass("drop");
           }
         }
       }
@@ -438,19 +496,11 @@ window.App = {
       App.cleanBoard();
       $(".in-game").hide();
       $(".game-start").show();
+      $("#ships").hide();
       $("h3").text("");
       $("#save").attr("disabled", "disabled");
       $("#tggl").attr("disabled", false);
       $("#txt").text("1");
-      // var styles = {
-      //   height: "60px",
-      //   width: "60px",
-      //   border: "none",
-      //   background: "-webkit-gradient(linear,left top, right bottom, from(#03c), to(#3cf))"
-      // };
-      // var $btnList = $('#matrix .btn');
-      // $btnList.css(styles);
-      // $btnList.addClass("vert");
     }
   }
 

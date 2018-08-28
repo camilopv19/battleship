@@ -21,31 +21,32 @@ pragma solidity ^ 0.4 .23;
  * The 2d fixed array will contain the status of each square on 
  * the board according to:
     0 : Empty
-    1 : Part of the Carrier
-    2 : Part of the Battleship
-    3 : Part of the Destroyer
-    4 : Part of the Submarine
-    5 : Part of the Patrol Boat
+    1 : Part of the Patrol Boat
+    2 : Part of the Destroyer
+    3 : Part of the Submarine
+    4 : Part of the Battleship
+    5 : Part of the Carrier
  *
  * @author Camilo Patino <kmilopv@gmail.com>
  *
  */
 contract BattleShip {
+
     // Contract Variables
+    
     uint constant public gameCost = 0.1 ether;
-    mapping(string => uint)rLetter;
     uint rows = 10;
     uint cols = 10;
     uint sunken = 0;
-    // uint[5] ships = [5, 4, 3, 3, 2];
-    uint[5] ships = [0, 0, 0, 0, 2];
-    uint _result;
+    uint[5] ships = [5, 4, 3, 3, 2];
+    uint8 _result;
     string _boardStr;
-    uint[10][10] public gameBoard;
+    uint8[10][10] public myBoard;
+    uint8[10][10] public gameBoard;
+    mapping(string => uint)rLetter;
     
     event AllSunk(bool _win);
-    event Message(string _word);
-
+    
     constructor()public payable {
         require(msg.value == gameCost);
         rLetter["A"] = 0;
@@ -60,35 +61,29 @@ contract BattleShip {
         rLetter["J"] = 9;  
 
         gameBoard = [
-        [0, 0, 0, 2, 2, 2, 2, 0, 0, 0],
+        [0, 0, 0, 4, 4, 4, 4, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 3, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 3, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 3, 4, 4, 4],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 5, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 5, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        [5, 0, 0, 0, 0, 0, 3, 2, 2, 2],
+        [5, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [5, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [5, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [5, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ]; 
     }
-
-    /** @dev Stores the users board - Only a string (I couldn't pass an array from Front-end).
+    
+/** @dev Stores the users board
       * @param _brd Array with new board
-      * @param _brd String with the 17 cells of the ships
       */
-    function saveBoard(string _brd)
+      
+    function saveBoard(uint8[10][10] _brd)
     public
-    returns(uint[10][10]){
-        _boardStr = _brd;
-        return gameBoard;
+    {
+        myBoard = _brd;
     }
-    // function saveBoard(uint[17] _brd)
-    // public 
-    // pure
-    // returns(uint[17]){
-    //     return _brd;
-    // }
+
 
     /** @dev Returns the result in UINT format, according the guess in the board.
       */
@@ -124,11 +119,6 @@ contract BattleShip {
             // Set this square's value to indicate a hit
             _result = shipStat(gameBoard[_row][_col]);
             gameBoard[_row][_col] = _result;
-            if (_result == 8) {
-                emit Message("Hit!");
-            } else {
-                emit Message("You sunk my ship!");
-            }
             // If player clicks a square that's been previously hit, let it know.
         } else if (gameBoard[_row][_col] > 1) {
 
@@ -145,12 +135,12 @@ contract BattleShip {
       *               8: Single hit
       *               10: All ships sunk
       */
-    function shipStat(uint _cellVal)
+    function shipStat(uint8 _cellVal)
     private 
-    returns(uint _stat) {
+    returns(uint8 _stat) {
 
         // Carrier
-        if (_cellVal == 1 && ships[0] != 0) {
+        if (_cellVal == 5 && ships[0] != 0) {
             ships[0] -= 1;
 
             if (ships[0] == 0) {
@@ -162,7 +152,7 @@ contract BattleShip {
             }
 
         // Battleship
-        } else if (_cellVal == 2 && ships[1] != 0) {
+        } else if (_cellVal == 4 && ships[1] != 0) {
             ships[1] -= 1;
 
             if (ships[1] == 0) {
@@ -174,7 +164,7 @@ contract BattleShip {
             }
 
         // Destroyer
-        } else if (_cellVal == 3 && ships[2] != 0) {
+        } else if (_cellVal == 2 && ships[2] != 0) {
             ships[2] -= 1;
 
             if (ships[2] == 0) {
@@ -186,7 +176,7 @@ contract BattleShip {
             }
 
         // Submarine
-        } else if (_cellVal == 4 && ships[3] != 0) {
+        } else if (_cellVal == 3 && ships[3] != 0) {
             ships[3] -= 1;
 
             if (ships[3] == 0) {
@@ -198,12 +188,11 @@ contract BattleShip {
             }
 
         //Patrol Boat
-        } else if (_cellVal == 5 && ships[4] != 0) {
+        } else if (_cellVal == 1 && ships[4] != 0) {
             ships[4] -= 1;
 
             if (ships[4] == 0) {
-                sunken += 5;
-                // sunken += 1;
+                sunken += 1;
                 _stat = 7;
             }
             else{
@@ -234,7 +223,16 @@ contract BattleShip {
     function getBoard()
     public
     view
-    returns(uint[10][10]) {
+    returns(uint8[10][10]) {
         return gameBoard;
+    }
+
+    /** @dev Returns the board (10x10 array).
+      */
+    function getMyBoard()
+    public
+    view
+    returns(uint8[10][10]) {
+        return myBoard;
     }
 }

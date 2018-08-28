@@ -23,13 +23,22 @@
         <div class="in-game">
           <hr /><input class="btn btn-default" readonly="readonly"onclick="App.orientation()" id="tggl" value="Toggle Vertical/Horizontal">
           <hr /><input class="btn btn-default" readonly="readonly" onclick="App.saveBoard()"  id="save" value="Save Board" disabled="disabled">
-          <hr /><input class="btn btn-default" readonly="readonly" onclick="App.getBoard()" id="getBrd" value="Test: Get Board">
+          <div id="myIds" class="in-game"></div>
+          <hr /><input class="btn btn-default" readonly="readonly" onclick="App.getBoard()" id="getBrd" value="Test: Get My Board">
+          <hr /><input class="btn btn-default" readonly="readonly" onclick="App.getGameBrd()" id="getGBrd" value="Test: Get Enemy Board">
+          <hr /><input class="btn btn-default" readonly="readonly" onclick="App.getShips()" id="getS" value="Test: Get Ships">
         </div>
         <br />
         <div id="game_table" class="in-game"></div>
-        <div id="myIds" class="in-game"></div>
         <div id="txt" class="mybox in-game">1</div>
-        <span class="hint small"><strong>Hint:</strong> Open the browser developer console to view any errors and warnings.</span>
+        <div class="in-game" id ="ships">
+          <span class="hint small" id="s1"></span><br />
+          <span class="hint small" id="s2"></span><br />
+          <span class="hint small" id="s3"></span><br />
+          <span class="hint small" id="s4"></span><br />
+          <span class="hint small" id="s5"></span><br />
+        </div>
+        <span class="hint small" id="s6" ><strong>Hint:</strong> Open the browser developer console to view any errors and warnings.</span>
       </div>
     </div>
   </div>
