@@ -33,3 +33,9 @@ This project is made for 1 player and uses a fixed 2D array simulating the enemy
 4. Start guessing by clicking on every cell and see the block change its color according the success/fail of the guess. Each click fires a transaction in Metamask that should be submitted.
 
 The game shows when all of the ships are sunk or just one of them.
+
+### Testing (JavaScript)
+
+- Button to call and get your stored board.
+- Button to call and get the fixed board (opponent).
+- Button to call and get all the Ships.
